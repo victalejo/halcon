@@ -1,0 +1,66 @@
+name: Deploy to production
+
+# Auto-deploys Halcon Web to the ia-portafolio-principal server on every push to
+# main. Runs on the dedicated self-hosted runner (label: halcon) installed on
+# that box, so the deploy happens locally — no SSH keys or secrets required.
+#
+# The deploy directory (~/halcon) holds server-only files that are intentionally
+# NOT in the repo and must be preserved across deploys:
+#   - docker-compose.yml      (Traefik labels + basic-auth hash + rate-limit)
+#   - .env                    (runtime config / secrets, if any)
+#   - data/wmn-data.json      (downloaded WhatsMyName list)
+# These are excluded from the rsync so a deploy never clobbers them.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: halcon-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: [self-hosted, halcon]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Sync code into deploy directory
+        run: |
+          rsync -a --delete \
+            --exclude='.git/' \
+            --exclude='.github/' \
+            --exclude='docker-compose.yml' \
+            --exclude='.env' \
+            --exclude='data/wmn-data.json' \
+            --exclude='results/' \
+            --exclude='.venv/' \
+            --exclude='__pycache__/' \
+            --exclude='*.pyc' \
+            "${GITHUB_WORKSPACE}/" "${HOME}/halcon/"
+
+      - name: Build & restart container
+        run: |
+          cd "${HOME}/halcon"
+          docker compose up -d --build
+
+      - name: Health check
+        run: |
+          cd "${HOME}/halcon"
+          for i in $(seq 1 20); do
+            if docker compose exec -T halcon-web python -c "import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8000/api/health', timeout=5).getcode()==200 else 1)" 2>/dev/null; then
+              echo "✅ Halcon is healthy"
+              exit 0
+            fi
+            echo "waiting for container to become healthy... ($i/20)"
+            sleep 3
+          done
+          echo "❌ Health check failed — recent logs:"
+          docker compose logs --tail=60 halcon-web
+          exit 1
+
+      - name: Prune dangling images
+        if: always()
+        run: docker image prune -f >/dev/null 2>&1 || true
