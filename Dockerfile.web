@@ -1,0 +1,14 @@
+FROM python:3.12-slim
+
+WORKDIR /app
+COPY . .
+
+RUN python3 -m pip install --no-cache-dir -r requirements.txt -r requirements-web.txt
+
+ENV HOST=0.0.0.0 \
+    PORT=8000
+
+EXPOSE 8000
+
+# Run from the repo root (WORKDIR) so config paths and assets resolve.
+CMD ["python3", "run_web.py"]

@@ -2,7 +2,7 @@
 
 <figure><img src=".gitbook/assets/ai-demo.png" alt=""><figcaption></figcaption></figure>
 
-Blackbird supports AI analysis to generate behavioral insights based on the sites where a username or email is found.
+Halcon supports AI analysis to generate behavioral insights based on the sites where a username or email is found.
 
 ### 🔧 Setup
 
@@ -11,7 +11,7 @@ To enable AI analysis:
 1. Generate an API key:
 
 ```bash
-python blackbird.py --setup-ai
+python halcon.py --setup-ai
 ```
 
 > The API key is stored locally in a file named `.ai_key.json`.
@@ -19,7 +19,7 @@ python blackbird.py --setup-ai
 2. Run a search with the `--ai` flag:
 
 ```bash
-python blackbird.py --username johndoe --ai
+python halcon.py --username johndoe --ai
 ```
 
 ### 📄 Export
@@ -35,7 +35,7 @@ Each user can run a limited number of AI-enhanced searches per day. Once the lim
 
 ### 🔐 Privacy and Data Handling
 
-Blackbird does **not** send any personal or sensitive information to the AI API.\
+Halcon does **not** send any personal or sensitive information to the AI API.\
 Only the **names of the discovered sites** are transmitted for analysis.\
 No data is stored or retained after the response is generated.
 
@@ -47,5 +47,5 @@ No data is stored or retained after the response is generated.
 
 ### 💬 Questions and Suggestions
 
-If you have suggestions, feedback, or questions about the AI API, feel free to [open an issue](https://github.com/p1ngul1n0/blackbird/issues) on the GitHub repository.
+If you have suggestions, feedback, or questions about the AI API, feel free to [open an issue](https://github.com/p1ngul1n0/halcon/issues) on the GitHub repository.
 

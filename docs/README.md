@@ -1,12 +1,12 @@
-# Blackbird
+# Halcon
 
 <figure><img src=".gitbook/assets/ai-demo.png" alt=""><figcaption></figcaption></figure>
 
 ## What is it?
 
-**Blackbird** is a powerful Open Source Intelligence (OSINT) tool designed for fast and thorough searches of user accounts by **username or email** across a wide range of online platforms.
+**Halcon** is a powerful Open Source Intelligence (OSINT) tool designed for fast and thorough searches of user accounts by **username or email** across a wide range of online platforms.
 
-While built with OSINT in mind, Blackbird goes beyond simple account discovery — offering flexibility, customization, and **free AI-driven analysis** to support modern digital investigations and profiling.
+While built with OSINT in mind, Halcon goes beyond simple account discovery — offering flexibility, customization, and **free AI-driven analysis** to support modern digital investigations and profiling.
 
 #### Key Features:
 

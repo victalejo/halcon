@@ -1,0 +1,26 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e4]:
+      - heading "HalconWeb" [level=1] [ref=e5]
+      - paragraph [ref=e6]: OSINT username & email search across 600+ sites
+    - generic "WhatsMyName site list status" [ref=e7]: site list ready
+  - main [ref=e8]:
+    - generic [ref=e9]:
+      - tablist [ref=e10]:
+        - tab "Username" [ref=e11] [cursor=pointer]
+        - tab "Email" [ref=e12] [cursor=pointer]
+      - generic [ref=e13]:
+        - textbox "Search query" [ref=e14]:
+          - /placeholder: Enter a username…
+        - button "Search" [ref=e15] [cursor=pointer]
+      - group [ref=e16]:
+        - generic "Advanced options" [ref=e17] [cursor=pointer]
+  - contentinfo [ref=e18]:
+    - paragraph [ref=e19]:
+      - text: Powered by the open-source
+      - link "Halcon" [ref=e20] [cursor=pointer]:
+        - /url: https://github.com/p1ngul1n0/halcon
+      - text: engine & the
+      - link "WhatsMyName" [ref=e21] [cursor=pointer]:
+        - /url: https://github.com/WebBreacher/WhatsMyName
+      - text: project. For authorized OSINT and research use only.

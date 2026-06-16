@@ -1,8 +1,8 @@
-# Blackbird
+# Halcon
 
 <figure><img src="./docs/.gitbook/assets/ai-demo.png" alt=""><figcaption></figcaption></figure>
 
-> Blackbird is a powerful OSINT tool that combines fast username and email searches across more than 600 platforms with free AI-powered profiling. By leveraging community-driven projects like WhatsMyName, it ensures low false positive rates and high-quality results. Features include smart filters, polished PDF/CSV exports, and fully automated analysis — all from a single CLI.
+> Halcon is a powerful OSINT tool that combines fast username and email searches across more than 600 platforms with free AI-powered profiling. By leveraging community-driven projects like WhatsMyName, it ensures low false positive rates and high-quality results. Features include smart filters, polished PDF/CSV exports, and fully automated analysis — all from a single CLI.
 <br>
 
 [![SherlockEyeCover](./docs/.gitbook/assets/sherlockeye_cover.jpg)](https://cutt.ly/frtVNzQQ)
@@ -12,8 +12,8 @@
 **Clone the repository**
 
 ```bash
-git clone https://github.com/p1ngul1n0/blackbird
-cd blackbird
+git clone https://github.com/p1ngul1n0/halcon
+cd halcon
 ```
 
 **Install requirements**
@@ -27,23 +27,23 @@ pip install -r requirements.txt
 **Search by username**
 
 ```bash
-python blackbird.py --username johndoe
+python halcon.py --username johndoe
 ```
 
 **Search by email**
 
 ```bash
-python blackbird.py --email johndoe@example.com 
+python halcon.py --email johndoe@example.com 
 ```
 
 **Export results to PDF**
 
 ```bash
-python blackbird.py --email  --pdf
+python halcon.py --email  --pdf
 ```
 
 ##  ✨ AI (Free)
-Blackbird integrates an AI engine that analyzes the sites where a username or email is found and returns a behavioral and technical profile of the user — helping you understand more, with less effort.
+Halcon integrates an AI engine that analyzes the sites where a username or email is found and returns a behavioral and technical profile of the user — helping you understand more, with less effort.
 
 - No sensitive data is shared — only site names are sent
 
@@ -52,15 +52,15 @@ Blackbird integrates an AI engine that analyzes the sites where a username or em
 - AI results are also included in PDF exports (```--pdf```)
 #### Generate an API key:
 ```bash
-python blackbird.py --setup-ai
+python halcon.py --setup-ai
 ```
 #### Use it
 ```bash
-python blackbird.py --username johndoe --ai
+python halcon.py --username johndoe --ai
 ```
 
 ## More
-For more details about the project, visit the <a href="https://p1ngul1n0.gitbook.io/blackbird/">Docs</a>
+For more details about the project, visit the <a href="https://p1ngul1n0.gitbook.io/halcon/">Docs</a>
 
 ### Project Developer
 
@@ -68,7 +68,7 @@ For more details about the project, visit the <a href="https://p1ngul1n0.gitbook
 
 ### WhatsMyName
 
-Blackbird is fully integrated with [WhatsMyName](https://github.com/WebBreacher/WhatsMyName) project, witch has 600+ sites to perform accurate reverse username search.
+Halcon is fully integrated with [WhatsMyName](https://github.com/WebBreacher/WhatsMyName) project, witch has 600+ sites to perform accurate reverse username search.
 
 ### Sponsors
 

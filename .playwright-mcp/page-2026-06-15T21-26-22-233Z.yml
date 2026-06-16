@@ -1,0 +1,66 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - img "Blackbird" [ref=e4]
+      - generic [ref=e5]:
+        - heading "BlackbirdWeb" [level=1] [ref=e6]
+        - paragraph [ref=e7]: OSINT username & email search across 600+ sites
+    - generic "WhatsMyName site list status" [ref=e8]: site list ready
+  - main [ref=e9]:
+    - generic [ref=e10]:
+      - tablist [ref=e11]:
+        - tab "Username" [ref=e12] [cursor=pointer]
+        - tab "Email" [ref=e13] [cursor=pointer]
+      - generic [ref=e14]:
+        - textbox "Search query" [disabled] [ref=e15]:
+          - /placeholder: Enter a username…
+          - text: octocat
+        - button "Search" [disabled] [ref=e16]
+        - button "Stop" [ref=e23] [cursor=pointer]
+      - group [ref=e17]:
+        - generic "Advanced options" [ref=e18] [cursor=pointer]
+    - generic [ref=e25]:
+      - generic [ref=e26]: Scanning 732 sites for "octocat"
+      - generic [ref=e27]: 28/732 (4%)
+    - generic [ref=e30]:
+      - generic [ref=e31]:
+        - heading "4 accounts found" [level=2] [ref=e32]
+        - generic [ref=e34]:
+          - generic [ref=e35]: "Export:"
+          - button "PDF" [ref=e36] [cursor=pointer]
+          - button "CSV" [ref=e37] [cursor=pointer]
+          - button "JSON" [ref=e38] [cursor=pointer]
+      - generic [ref=e39]:
+        - generic [ref=e40]:
+          - generic [ref=e41]:
+            - generic [ref=e42]: Apex Legends
+            - generic [ref=e43]: gaming
+          - link "https://api.tracker.gg/api/v2/apex/standard/profile/origin/octocat" [ref=e44] [cursor=pointer]:
+            - /url: https://api.tracker.gg/api/v2/apex/standard/profile/origin/octocat
+        - generic [ref=e45]:
+          - generic [ref=e46]:
+            - generic [ref=e47]: Ameblo
+            - generic [ref=e48]: blog
+          - link "https://ameblo.jp/octocat" [ref=e49] [cursor=pointer]:
+            - /url: https://ameblo.jp/octocat
+        - generic [ref=e50]:
+          - generic [ref=e51]:
+            - generic [ref=e52]: Audiojungle
+            - generic [ref=e53]: music
+          - link "https://audiojungle.net/user/octocat" [ref=e54] [cursor=pointer]:
+            - /url: https://audiojungle.net/user/octocat
+        - generic [ref=e55]:
+          - generic [ref=e56]:
+            - generic [ref=e57]: Arch Linux GitLab
+            - generic [ref=e58]: social
+          - link "https://gitlab.archlinux.org/api/v4/users?username=octocat" [ref=e59] [cursor=pointer]:
+            - /url: https://gitlab.archlinux.org/api/v4/users?username=octocat
+  - contentinfo [ref=e19]:
+    - paragraph [ref=e20]:
+      - text: Powered by the open-source
+      - link "Blackbird" [ref=e21] [cursor=pointer]:
+        - /url: https://github.com/p1ngul1n0/blackbird
+      - text: engine & the
+      - link "WhatsMyName" [ref=e22] [cursor=pointer]:
+        - /url: https://github.com/WebBreacher/WhatsMyName
+      - text: project. For authorized OSINT and research use only.

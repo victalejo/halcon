@@ -5,7 +5,7 @@
 Verbose mode provides more detailed information during the tool's execution.
 
 ```bash
-python blackbird.py --username username1 --verbose
+python halcon.py --username username1 --verbose
 ```
 
 ### Filter
@@ -13,7 +13,7 @@ python blackbird.py --username username1 --verbose
 The `filter` command allows you to filter the sites to be searched based on various conditions. You can use a variety of operators and logical connectors to create complex filter expressions.
 
 ```bash
-python blackbird.py --filter "name~Mastodon and cat=social or e_code<=200" --username crash 
+python halcon.py --filter "name~Mastodon and cat=social or e_code<=200" --username crash 
 ```
 
 Check below for details to create your own filter search.
@@ -53,25 +53,25 @@ Check below for details to create your own filter search.
 **Filter by Name Contains "Mastodon"**
 
 ```bash
-python blackbird.py --filter "name~Mastodon" --username crash 
+python halcon.py --filter "name~Mastodon" --username crash 
 ```
 
 **Filter by Existent Code Greater Than 200**
 
 ```bash
-python blackbird.py --filter "e_code>200" --username crash 
+python halcon.py --filter "e_code>200" --username crash 
 ```
 
 **Filter by Category Equals "social" and URI Contains "101010"**
 
 ```bash
-python blackbird.py --filter "cat=social and uri_check~101010" --username crash 
+python halcon.py --filter "cat=social and uri_check~101010" --username crash 
 ```
 
 **Filter by Error String Equals "@101010.pl" or Innexistent Code Less Than or Equal to 404**
 
 ```bash
-python blackbird.py --filter "e_string=@101010.pl or m_code<=404" --username crash 
+python halcon.py --filter "e_string=@101010.pl or m_code<=404" --username crash 
 ```
 
 </details>
@@ -111,7 +111,7 @@ The tool is able to extract additional, such as **obfuscated email and phone num
 If you\`re stuck in your investigation, you can use `--permute` to generate variations of a given username.&#x20;
 
 ```bash
-python blackbird.py --username balestek 86 --permute
+python halcon.py --username balestek 86 --permute
 ```
 
 This will generate a list of 12 combinations:
@@ -175,7 +175,7 @@ _86balestek
 If you wish to exclude NSFW sites from the search, simply use the `--no-nsfw` argument.
 
 ```bash
-python blackbird.py --username username1 --no-nsfw
+python halcon.py --username username1 --no-nsfw
 ```
 
 ### Proxy
@@ -183,7 +183,7 @@ python blackbird.py --username username1 --no-nsfw
 Use the `--proxy` argument to route all HTTP requests through a proxy.
 
 ```bash
-python blackbird.py --username username1 --proxy "http://myproxy:9090"
+python halcon.py --username username1 --proxy "http://myproxy:9090"
 ```
 
 ### Timeout
@@ -191,7 +191,7 @@ python blackbird.py --username username1 --proxy "http://myproxy:9090"
 To modify the server response timeout, use the `--timeout` argument followed by the desired timeout duration in seconds.
 
 ```bash
-python blackbird.py --username username1 --timeout 30
+python halcon.py --username username1 --timeout 30
 ```
 
 ### No Update
@@ -199,5 +199,5 @@ python blackbird.py --username username1 --timeout 30
 Use the `--no-update` argument to instruct the tool not to check for updates in the WhatsMyName list.
 
 ```bash
-python blackbird.py --username username1 --no-update
+python halcon.py --username username1 --no-update
 ```

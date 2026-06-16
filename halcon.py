@@ -37,7 +37,7 @@ def initiate():
     )
 
     parser = argparse.ArgumentParser(
-        prog="blackbird",
+        prog="halcon",
         description="An OSINT tool to search for accounts by username in social networks.",
     )
     parser.add_argument(
@@ -199,7 +199,7 @@ if __name__ == "__main__":
         config.console.print(
             """
         Author: Lucas Antoniaci (p1ngul1n0)
-        Description: Blackbird is an OSINT tool that perform reverse search in username and emails.
+        Description: Halcon is an OSINT tool that perform reverse search in username and emails.
         About WhatsMyName Project: This tool search for accounts using data from the WhatsMyName project, which is an open-source tool developed by WebBreacher. WhatsMyName License: The WhatsMyName project is licensed under the Creative Commons Attribution-ShareAlike 4.0 International License (CC BY-SA 4.0). More details (https://github.com/WebBreacher/WhatsMyName)
         """
         )
@@ -224,7 +224,7 @@ if __name__ == "__main__":
         checkUpdates(config)
 
     if config.ai:
-        config.console.print("[yellow1]:exclamation: By proceeding, you consent to share the found site names with Blackbird AI for analysis.[/yellow1] [Y/n]", end="")
+        config.console.print("[yellow1]:exclamation: By proceeding, you consent to share the found site names with Halcon AI for analysis.[/yellow1] [Y/n]", end="")
         confirm = input(" > ").strip().lower()
 
         if confirm not in ["", "y"]:

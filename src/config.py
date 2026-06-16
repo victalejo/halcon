@@ -20,7 +20,7 @@ EMAIL_LIST_PATH = os.path.join(os.getcwd(), LIST_DIRECTORY, EMAIL_LIST_FILENAME)
 
 # Logs
 LOG_DIRECTORY = "logs"
-LOG_FILENAME = "blackbird.log"
+LOG_FILENAME = "halcon.log"
 LOG_PATH = os.path.join(os.getcwd(), LOG_DIRECTORY, LOG_FILENAME)
 
 # Assets

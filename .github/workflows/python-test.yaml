@@ -1,4 +1,4 @@
-name: Blackbird Python Tests
+name: Halcon Python Tests
 
 on:
   push:

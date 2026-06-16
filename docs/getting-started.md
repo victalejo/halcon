@@ -9,8 +9,8 @@ Python3 or above is required
 #### **Clone the repository**
 
 ```bash
-git clone https://github.com/p1ngul1n0/blackbird
-cd blackbird
+git clone https://github.com/p1ngul1n0/halcon
+cd halcon
 ```
 
 #### **Install requirements**

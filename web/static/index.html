@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Halcon — OSINT Web</title>
+  <meta name="description" content="Search usernames and emails across 600+ sites." />
+  <link rel="icon" type="image/png" href="/static/img/halcon-logo.png" />
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <img src="/static/img/halcon-logo.png" alt="Halcon" class="logo" onerror="this.style.display='none'" />
+      <div class="brand-text">
+        <h1>Halcon<span class="accent">Web</span></h1>
+        <p>OSINT username &amp; email search across 600+ sites</p>
+      </div>
+    </div>
+    <span id="list-status" class="badge" title="WhatsMyName site list status">checking…</span>
+  </header>
+
+  <main class="container">
+    <form id="search-form" class="search-card" autocomplete="off">
+      <div class="mode-switch" role="tablist">
+        <button type="button" class="mode active" data-mode="username" role="tab">Username</button>
+        <button type="button" class="mode" data-mode="email" role="tab">Email</button>
+      </div>
+
+      <div class="search-row">
+        <input
+          id="query"
+          type="text"
+          name="q"
+          placeholder="Enter a username…"
+          maxlength="200"
+          required
+          aria-label="Search query"
+        />
+        <button type="submit" id="search-btn" class="primary">Search</button>
+        <button type="button" id="cancel-btn" class="ghost" hidden>Stop</button>
+      </div>
+
+      <details class="advanced">
+        <summary>Advanced options</summary>
+        <div class="advanced-grid">
+          <label class="check">
+            <input type="checkbox" id="nsfw" checked />
+            <span>Include NSFW sites</span>
+          </label>
+          <label>
+            Timeout (s)
+            <input type="number" id="timeout" value="30" min="1" max="120" />
+          </label>
+          <label>
+            Concurrency
+            <input type="number" id="concurrency" value="30" min="1" max="100" />
+          </label>
+        </div>
+      </details>
+    </form>
+
+    <section id="progress-section" class="progress-section" hidden>
+      <div class="progress-head">
+        <span id="progress-label">Starting…</span>
+        <span id="progress-count" class="muted"></span>
+      </div>
+      <div class="progress-track"><div id="progress-bar" class="progress-bar"></div></div>
+    </section>
+
+    <section id="results-section" hidden>
+      <div class="results-head">
+        <h2><span id="found-count">0</span> accounts found</h2>
+        <div class="actions">
+          <button type="button" class="ai-btn" id="ai-btn" hidden>✨ AI analysis</button>
+          <div class="export-group" id="export-group" hidden>
+            <span class="muted">Export:</span>
+            <button type="button" data-fmt="pdf">PDF</button>
+            <button type="button" data-fmt="csv">CSV</button>
+            <button type="button" data-fmt="json">JSON</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="ai-panel" class="ai-panel" hidden></div>
+      <div id="results" class="results-grid" aria-live="polite"></div>
+      <p id="empty-state" class="empty" hidden>No accounts found for this query.</p>
+    </section>
+
+    <div id="toast" class="toast" hidden></div>
+  </main>
+
+  <footer class="footer">
+    <p>
+      Powered by the open-source
+      <a href="https://github.com/p1ngul1n0/halcon" target="_blank" rel="noopener">Halcon</a>
+      engine &amp; the <a href="https://github.com/WebBreacher/WhatsMyName" target="_blank" rel="noopener">WhatsMyName</a> project.
+      For authorized OSINT and research use only.
+    </p>
+  </footer>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

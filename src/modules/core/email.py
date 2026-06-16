@@ -166,7 +166,7 @@ def verifyEmail(email, config):
 
     if config.dump:
         config.console.print(
-            f"💾  Dump content saved to '[cyan1]{config.currentEmail}_{config.dateRaw}_blackbird/dump_{config.currentEmail}[/cyan1]'"
+            f"💾  Dump content saved to '[cyan1]{config.currentEmail}_{config.dateRaw}_halcon/dump_{config.currentEmail}[/cyan1]'"
         )
 
     # Filter results to only found accounts

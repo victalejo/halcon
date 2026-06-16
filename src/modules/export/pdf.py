@@ -49,7 +49,7 @@ def saveToPdf(foundAccounts, resultType, config):
                 os.getcwd(),
                 config.ASSETS_DIRECTORY,
                 config.IMAGES_DIRECTORY,
-                "blackbird-logo.png",
+                "halcon-logo.png",
             ),
             35,
             height - 90,
@@ -64,7 +64,7 @@ def saveToPdf(foundAccounts, resultType, config):
         canva.drawString(
             width - 185,
             height - 25,
-            "This report was generated using the Blackbird OSINT Tool.",
+            "This report was generated using the Halcon OSINT Tool.",
         )
 
         canva.setFillColor("#EDEBED")
@@ -113,7 +113,7 @@ def saveToPdf(foundAccounts, resultType, config):
         canva.drawString(
             70,
             height - 195,
-            "Blackbird can make mistakes. Consider checking the information.",
+            "Halcon can make mistakes. Consider checking the information.",
         )
 
         if config.ai_analysis:

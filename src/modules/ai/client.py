@@ -14,7 +14,7 @@ def send_prompt(prompt, config):
         return None
     headers = {
         "Content-Type": "application/json",
-        "User-Agent": "blackbird-cli",
+        "User-Agent": "halcon-cli",
         "x-api-key": apikey
     }
     payload = {

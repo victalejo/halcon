@@ -179,7 +179,7 @@ def verifyUsername(username, config, sitesToSearch=None, metadata_params=None):
 
     if config.dump:
         config.console.print(
-            f"💾  Dump content saved to '[cyan1]{config.currentUser}_{config.dateRaw}_blackbird/dump_{config.currentUser}[/cyan1]'"
+            f"💾  Dump content saved to '[cyan1]{config.currentUser}_{config.dateRaw}_halcon/dump_{config.currentUser}[/cyan1]'"
         )
 
     # Filter results to only found accounts

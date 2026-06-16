@@ -1,35 +1,35 @@
 # 🔍 Basic Usage
 
 {% hint style="warning" %}
-Blackbird can make mistakes. Consider checking the information.
+Halcon can make mistakes. Consider checking the information.
 {% endhint %}
 
 ### 👤 Username Reverse Search
 
 ```bash
-python blackbird.py --username username1
+python halcon.py --username username1
 ```
 
 ```bash
-python blackbird.py --username username1 username2 username3
+python halcon.py --username username1 username2 username3
 ```
 
 ```bash
-python blackbird.py --username-file usernames.txt
+python halcon.py --username-file usernames.txt
 ```
 
 ### 📧 Email Reverse Search
 
 ```bash
-python blackbird.py --email email1@email
+python halcon.py --email email1@email
 ```
 
 ```bash
-python blackbird.py --email email1@email email2@email email3@email
+python halcon.py --email email1@email email2@email email3@email
 ```
 
 ```bash
-python blackbird.py --email-file emails.txt
+python halcon.py --email-file emails.txt
 ```
 
 ### 📁 Export
@@ -37,7 +37,7 @@ python blackbird.py --email-file emails.txt
 #### PDF
 
 ```bash
-python blackbird.py --username p1ngul1n0 --pdf
+python halcon.py --username p1ngul1n0 --pdf
 ```
 
 <figure><img src=".gitbook/assets/pdf-full.png" alt=""><figcaption></figcaption></figure>
@@ -45,13 +45,13 @@ python blackbird.py --username p1ngul1n0 --pdf
 #### CSV
 
 ```
-python blackbird.py --username username1 --csv
+python halcon.py --username username1 --csv
 ```
 
 #### JSON
 
 ```
-python blackbird.py --username username1 --json
+python halcon.py --username username1 --json
 ```
 
 #### DUMP
@@ -59,5 +59,5 @@ python blackbird.py --username username1 --json
 Dump all found account HTTP responses.
 
 ```
-python blackbird.py --username username1 --dump
+python halcon.py --username username1 --dump
 ```

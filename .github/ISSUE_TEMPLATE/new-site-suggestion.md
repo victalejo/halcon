@@ -10,7 +10,7 @@ assignees: ''
 # New Site Addition Proposal: [Site Name]
 
 ## Description
-Provide a brief description of the website you'd like to add to Blackbird.
+Provide a brief description of the website you'd like to add to Halcon.
 
 ## Website Details
 - **Website URL**: [Insert URL here]

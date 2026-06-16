@@ -1,6 +1,6 @@
 # Table of contents
 
-* [Blackbird](README.md)
+* [Halcon](README.md)
 * [▶️ Getting Started](getting-started.md)
 * [🔍 Basic Usage](basic-usage.md)
 * [✨ AI](ai.md)

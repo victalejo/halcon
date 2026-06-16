@@ -12,7 +12,7 @@ KEY_PATH = PROJECT_ROOT / ".ai_key.json"
 def fetch_api_key_from_server(config):
     try:
         headers = {
-            "User-Agent": "blackbird-cli",
+            "User-Agent": "halcon-cli",
         }
         response = do_sync_request(
             method="GET",

@@ -62,9 +62,9 @@ def createImagesDirectory(identifier, config):
 
 def generateName(config, extension=None):
     if config.currentUser:
-        folderName = f"{config.currentUser}_{config.dateRaw}_blackbird"
+        folderName = f"{config.currentUser}_{config.dateRaw}_halcon"
     elif config.currentEmail:
-        folderName = f"{config.currentEmail}_{config.dateRaw}_blackbird"
+        folderName = f"{config.currentEmail}_{config.dateRaw}_halcon"
 
     if extension:
         folderName = folderName + "." + extension
