@@ -113,10 +113,18 @@ def test_safe_identifier_blocks_traversal():
 
 # ------------------------------- integration ---------------------------------
 @pytest.fixture
-def client():
+def client(monkeypatch):
     pytest.importorskip("rich")
     pytest.importorskip("fastapi")
     pytest.importorskip("httpx")
+    # Keep integration tests free of auth/rate-limit side effects by default.
+    monkeypatch.delenv("HALCON_API_KEY", raising=False)
+    monkeypatch.delenv("HALCON_BASIC_USER", raising=False)
+    monkeypatch.delenv("HALCON_BASIC_PASSWORD", raising=False)
+    monkeypatch.setenv("HALCON_RATE_LIMIT", "0")
+    from web.security import reset_rate_limiter
+
+    reset_rate_limiter()
     from fastapi.testclient import TestClient
     from web.app import app
 
@@ -130,6 +138,9 @@ def test_health(client):
     body = res.json()
     assert body["status"] == "ok"
     assert "site_list_present" in body
+    assert body["auth_required"] is False
+    assert body["auth_modes"] == []
+    assert body["rate_limit"] == 0
 
 
 def test_username_search_rejects_empty(client):
@@ -160,3 +171,99 @@ def test_export_rejects_bad_format(client):
         },
     )
     assert res.status_code == 400
+
+
+def test_api_key_auth_required(monkeypatch):
+    pytest.importorskip("rich")
+    pytest.importorskip("fastapi")
+    pytest.importorskip("httpx")
+    monkeypatch.setenv("HALCON_API_KEY", "test-secret")
+    monkeypatch.setenv("HALCON_RATE_LIMIT", "0")
+    from web.security import reset_rate_limiter
+
+    reset_rate_limiter()
+    from fastapi.testclient import TestClient
+    from web.app import app
+
+    c = TestClient(app)
+
+    health = c.get("/api/health")
+    assert health.status_code == 200
+    assert health.json()["auth_required"] is True
+    assert "api_key" in health.json()["auth_modes"]
+
+    # Use email validation (fast 400) so auth is exercised without a full scan.
+    denied = c.get("/api/search/email?q=notanemail")
+    assert denied.status_code == 401
+
+    via_header = c.get(
+        "/api/search/email?q=notanemail", headers={"X-API-Key": "test-secret"}
+    )
+    assert via_header.status_code == 400
+
+    via_query = c.get("/api/search/email?q=notanemail&api_key=test-secret")
+    assert via_query.status_code == 400
+
+    via_bearer = c.get(
+        "/api/search/email?q=notanemail",
+        headers={"Authorization": "Bearer test-secret"},
+    )
+    assert via_bearer.status_code == 400
+
+    wrong = c.get(
+        "/api/search/email?q=notanemail", headers={"X-API-Key": "nope"}
+    )
+    assert wrong.status_code == 401
+
+
+def test_basic_auth(monkeypatch):
+    pytest.importorskip("rich")
+    pytest.importorskip("fastapi")
+    pytest.importorskip("httpx")
+    monkeypatch.delenv("HALCON_API_KEY", raising=False)
+    monkeypatch.setenv("HALCON_BASIC_USER", "admin")
+    monkeypatch.setenv("HALCON_BASIC_PASSWORD", "hunter2")
+    monkeypatch.setenv("HALCON_RATE_LIMIT", "0")
+    from web.security import reset_rate_limiter
+
+    reset_rate_limiter()
+    from fastapi.testclient import TestClient
+    from web.app import app
+
+    c = TestClient(app)
+    assert c.get("/api/search/email?q=notanemail").status_code == 401
+    ok = c.get("/api/search/email?q=notanemail", auth=("admin", "hunter2"))
+    assert ok.status_code == 400
+    bad = c.get("/api/search/email?q=notanemail", auth=("admin", "wrong"))
+    assert bad.status_code == 401
+
+
+def test_rate_limit_returns_429(monkeypatch):
+    pytest.importorskip("rich")
+    pytest.importorskip("fastapi")
+    pytest.importorskip("httpx")
+    monkeypatch.delenv("HALCON_API_KEY", raising=False)
+    monkeypatch.delenv("HALCON_BASIC_USER", raising=False)
+    monkeypatch.delenv("HALCON_BASIC_PASSWORD", raising=False)
+    monkeypatch.setenv("HALCON_RATE_LIMIT", "2")
+    monkeypatch.setenv("HALCON_RATE_LIMIT_WINDOW", "60")
+    from web.security import reset_rate_limiter
+
+    reset_rate_limiter()
+    from fastapi.testclient import TestClient
+    from web.app import app
+
+    c = TestClient(app)
+    # Health is public and must never be rate-limited.
+    assert c.get("/api/health").status_code == 200
+    assert c.get("/api/health").status_code == 200
+    assert c.get("/api/health").status_code == 200
+
+    r1 = c.get("/api/search/email?q=notanemail")
+    r2 = c.get("/api/search/email?q=notanemail")
+    r3 = c.get("/api/search/email?q=notanemail")
+    # First two pass auth+limit and hit validation (400); third is 429.
+    assert r1.status_code == 400
+    assert r2.status_code == 400
+    assert r3.status_code == 429
+    assert r3.headers.get("retry-after") is not None

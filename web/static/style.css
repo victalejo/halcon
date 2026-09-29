@@ -42,6 +42,14 @@ a { color: var(--accent-2); }
 .brand-text .accent { color: var(--accent); }
 .brand-text p { margin: 2px 0 0; color: var(--muted); font-size: 0.82rem; }
 
+.topbar-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
 .badge {
   font-size: 0.72rem;
   padding: 4px 10px;

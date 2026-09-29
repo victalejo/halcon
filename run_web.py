@@ -7,9 +7,14 @@ Usage:
     python run_web.py --reload        # dev auto-reload
 
 Environment variables:
-    HOST     bind address (default 127.0.0.1)
-    PORT     port (default 8000)
-    API_URL  Halcon AI endpoint (default from .env)
+    HOST                      bind address (default 127.0.0.1)
+    PORT                      port (default 8000)
+    API_URL                   Halcon AI endpoint (default from .env)
+    HALCON_API_KEY            if set, require X-API-Key / Bearer / ?api_key=
+    HALCON_BASIC_USER         with HALCON_BASIC_PASSWORD, enable HTTP Basic
+    HALCON_BASIC_PASSWORD
+    HALCON_RATE_LIMIT         max requests per IP per window (default 60; 0=off)
+    HALCON_RATE_LIMIT_WINDOW  window seconds (default 60)
 """
 
 import os

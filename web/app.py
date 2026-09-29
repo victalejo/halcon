@@ -8,6 +8,10 @@ Endpoints:
   POST /api/refresh-list       -> (re)download the WhatsMyName username list
   POST /api/ai/analyze         -> AI profile from found site names
   POST /api/export             -> download results as PDF/CSV/JSON
+
+Security (optional, env-driven — see web/security.py):
+  HALCON_API_KEY / HALCON_BASIC_*  → auth on /api/* (except health)
+  HALCON_RATE_LIMIT                → per-IP request cap (default 60/min)
 """
 
 from __future__ import annotations
@@ -30,6 +34,7 @@ from .config_factory import build_config
 from .search_service import stream_email_search, stream_username_search
 from .ai_service import analyze as ai_analyze
 from .export_service import ExportError, export as export_results
+from .security import SecurityMiddleware, security_status
 
 STATIC_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "static")
 MAX_QUERY_LEN = 200
@@ -63,6 +68,7 @@ async def lifespan(_app: FastAPI):
 
 
 app = FastAPI(title="Halcon Web", version="1.0.0", lifespan=lifespan)
+app.add_middleware(SecurityMiddleware)
 
 
 # ----------------------------- validation helpers ----------------------------
@@ -95,7 +101,9 @@ class ExportRequest(BaseModel):
 # --------------------------------- routes -------------------------------------
 @app.get("/api/health")
 async def health():
-    return {"status": "ok", "site_list_present": _site_list_present()}
+    body = {"status": "ok", "site_list_present": _site_list_present()}
+    body.update(security_status())
+    return body
 
 
 @app.get("/api/search/username")

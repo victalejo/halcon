@@ -87,10 +87,46 @@ docker run --rm -p 8000:8000 halcon-web
 { "type": "error",    "message": "..." }
 ```
 
+## Security (auth + rate limit)
+
+Auth is **opt-in** (open for local use). Rate limiting is **on by default**.
+
+| Variable | Default | Meaning |
+|----------|---------|---------|
+| `HALCON_API_KEY` | _(unset)_ | If set, require this key on `/api/*` (except health) |
+| `HALCON_BASIC_USER` | _(unset)_ | With password, enable HTTP Basic |
+| `HALCON_BASIC_PASSWORD` | _(unset)_ | Pair for Basic auth |
+| `HALCON_RATE_LIMIT` | `60` | Max requests per IP per window (`0` = off) |
+| `HALCON_RATE_LIMIT_WINDOW` | `60` | Window length in seconds |
+
+**API key** is accepted as:
+
+- Header `X-API-Key: <key>`
+- Header `Authorization: Bearer <key>`
+- Query `?api_key=<key>` (needed for `EventSource` / SSE, which cannot set headers)
+
+Public (no auth, no rate limit): `/`, `/api/health`, `/static/*`.
+
+`GET /api/health` reports `auth_required`, `auth_modes`, and rate-limit settings
+so the UI can show the API key field when the server is locked down.
+
+Example production-ish env:
+
+```bash
+export HALCON_API_KEY="$(openssl rand -hex 24)"
+export HALCON_RATE_LIMIT=30
+export HALCON_RATE_LIMIT_WINDOW=60
+python run_web.py
+```
+
+You can still put Traefik/nginx basic-auth in front; app-level auth is defense
+in depth for direct exposure.
+
 ## Notes & limits
 
-- Designed as a **local / internal** tool. There is no authentication or
-  rate-limiting; do not expose it to the public internet without adding those.
+- Prefer binding to localhost or putting a reverse proxy in front for public
+  deploys; enable `HALCON_API_KEY` (or Basic) whenever the service is reachable
+  beyond a trusted network.
 - Each search opens its own `aiohttp` session and isolated config; concurrent
   users are supported. Per-request concurrency is capped at 100.
 - Exported files are written under `results/` (already git-ignored).

@@ -2,12 +2,15 @@
 
 const $ = (sel) => document.querySelector(sel);
 
+const API_KEY_STORAGE = "halcon_api_key";
+
 const state = {
   mode: "username",
   results: [],
   target: "",
   kind: "username",
   source: null, // active EventSource
+  authRequired: false,
 };
 
 const els = {
@@ -19,6 +22,8 @@ const els = {
   nsfw: $("#nsfw"),
   timeout: $("#timeout"),
   concurrency: $("#concurrency"),
+  apiKey: $("#api-key"),
+  apiKeyLabel: $("#api-key-label"),
   progressSection: $("#progress-section"),
   progressLabel: $("#progress-label"),
   progressCount: $("#progress-count"),
@@ -31,8 +36,60 @@ const els = {
   aiBtn: $("#ai-btn"),
   aiPanel: $("#ai-panel"),
   listStatus: $("#list-status"),
+  authStatus: $("#auth-status"),
   toast: $("#toast"),
 };
+
+// --------------------------------- auth --------------------------------------
+function getApiKey() {
+  return (els.apiKey && els.apiKey.value ? els.apiKey.value : "").trim();
+}
+
+function authHeaders(extra = {}) {
+  const headers = { ...extra };
+  const key = getApiKey();
+  if (key) headers["X-API-Key"] = key;
+  return headers;
+}
+
+function withApiKey(url) {
+  const key = getApiKey();
+  if (!key) return url;
+  const sep = url.includes("?") ? "&" : "?";
+  return `${url}${sep}api_key=${encodeURIComponent(key)}`;
+}
+
+function setAuthUi(required) {
+  state.authRequired = !!required;
+  if (els.apiKeyLabel) els.apiKeyLabel.hidden = !required;
+  if (els.authStatus) {
+    els.authStatus.hidden = !required;
+    if (required) {
+      els.authStatus.textContent = "auth required";
+      els.authStatus.classList.add("warn");
+    }
+  }
+  if (required && els.apiKey && !els.apiKey.value) {
+    try {
+      const saved = sessionStorage.getItem(API_KEY_STORAGE) || "";
+      if (saved) els.apiKey.value = saved;
+    } catch {
+      /* private mode */
+    }
+  }
+}
+
+if (els.apiKey) {
+  els.apiKey.addEventListener("change", () => {
+    try {
+      const v = getApiKey();
+      if (v) sessionStorage.setItem(API_KEY_STORAGE, v);
+      else sessionStorage.removeItem(API_KEY_STORAGE);
+    } catch {
+      /* private mode */
+    }
+  });
+}
 
 // --------------------------------- helpers ----------------------------------
 function toast(message, isError = false) {
@@ -114,13 +171,24 @@ function startSearch() {
   els.progressLabel.textContent = "Starting…";
   els.progressCount.textContent = "";
 
+  if (state.authRequired && !getApiKey()) {
+    toast("API key required. Open Advanced options and enter it.", true);
+    if (els.apiKeyLabel) {
+      const details = els.apiKeyLabel.closest("details");
+      if (details) details.open = true;
+      els.apiKey.focus();
+    }
+    return;
+  }
+
   const params = new URLSearchParams({
     q,
     nsfw: els.nsfw.checked ? "true" : "false",
     timeout: String(els.timeout.value || 30),
     concurrency: String(els.concurrency.value || 30),
   });
-  const url = `/api/search/${state.kind}?${params.toString()}`;
+  // EventSource cannot send headers; api_key query is accepted by the server.
+  const url = withApiKey(`/api/search/${state.kind}?${params.toString()}`);
 
   setSearching(true);
   const source = new EventSource(url);
@@ -141,7 +209,10 @@ function startSearch() {
     if (state.source) {
       stopSearch();
       if (!state.results.length && els.progressBar.style.width !== "100%") {
-        toast("Connection to the server was lost.", true);
+        const msg = state.authRequired
+          ? "Search failed — check your API key or connection."
+          : "Connection to the server was lost.";
+        toast(msg, true);
       }
     }
   };
@@ -252,7 +323,7 @@ async function exportResults(fmt, btn) {
   try {
     const res = await fetch("/api/export", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: authHeaders({ "Content-Type": "application/json" }),
       body: JSON.stringify({
         format: fmt,
         kind: state.kind,
@@ -263,6 +334,8 @@ async function exportResults(fmt, btn) {
     });
     if (!res.ok) {
       const detail = await res.json().catch(() => ({}));
+      if (res.status === 401) throw new Error("Unauthorized — check your API key.");
+      if (res.status === 429) throw new Error("Rate limit exceeded — try again later.");
       throw new Error(detail.detail || `Export failed (${res.status})`);
     }
     const blob = await res.blob();
@@ -298,9 +371,17 @@ els.aiBtn.addEventListener("click", async () => {
   try {
     const res = await fetch("/api/ai/analyze", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: authHeaders({ "Content-Type": "application/json" }),
       body: JSON.stringify({ site_names: siteNames }),
     });
+    if (res.status === 401) {
+      toast("Unauthorized — check your API key.", true);
+      return;
+    }
+    if (res.status === 429) {
+      toast("Rate limit exceeded — try again later.", true);
+      return;
+    }
     const data = await res.json();
     if (!data.available) {
       toast(data.message || "AI is not configured.", true);
@@ -358,6 +439,7 @@ function renderAI(result, quota) {
   try {
     const res = await fetch("/api/health");
     const data = await res.json();
+    setAuthUi(!!data.auth_required);
     if (data.site_list_present) {
       els.listStatus.textContent = "site list ready";
       els.listStatus.classList.add("ok");

@@ -17,7 +17,10 @@
         <p>OSINT username &amp; email search across 600+ sites</p>
       </div>
     </div>
-    <span id="list-status" class="badge" title="WhatsMyName site list status">checking…</span>
+    <div class="topbar-status">
+      <span id="auth-status" class="badge" title="Authentication status" hidden>auth required</span>
+      <span id="list-status" class="badge" title="WhatsMyName site list status">checking…</span>
+    </div>
   </header>
 
   <main class="container">
@@ -55,6 +58,16 @@
           <label>
             Concurrency
             <input type="number" id="concurrency" value="30" min="1" max="100" />
+          </label>
+          <label id="api-key-label" hidden>
+            API key
+            <input
+              type="password"
+              id="api-key"
+              autocomplete="off"
+              placeholder="Required when server auth is on"
+              spellcheck="false"
+            />
           </label>
         </div>
       </details>
