@@ -1,6 +1,7 @@
 """AI profiling service.
 
-Wraps the same Halcon AI endpoint the CLI uses, but:
+Uses DeepSeek directly when DEEPSEEK_API_KEY is set; otherwise wraps the same
+hosted Halcon AI endpoint the CLI uses, but:
   * runs the blocking HTTP call in a thread so it never blocks the event loop;
   * returns structured data instead of the CLI's typewriter stdout effect;
   * degrades gracefully when no API key / API_URL is configured.
@@ -13,16 +14,37 @@ from __future__ import annotations
 
 import asyncio
 import json
+import logging
 from typing import Dict, List
 
+from modules.ai import deepseek
 from modules.ai.client import send_prompt  # noqa: F401  (kept for parity/reference)
 from modules.ai.key_manager import load_api_key_from_file
 from modules.utils.http_client import do_sync_request
 
+logger = logging.getLogger(__name__)
+
 MIN_SITES_FOR_ANALYSIS = 3
 
 
+def _analyze_deepseek(site_names: List[str], config) -> Dict:
+    try:
+        result = deepseek.analyze_sites(
+            site_names,
+            api_key=config.deepseek_api_key,
+            base_url=config.deepseek_base_url,
+            model=config.deepseek_model,
+        )
+    except deepseek.DeepSeekError as exc:
+        logger.warning("AI profiling via DeepSeek failed: %s", exc)
+        return {"available": True, "ok": False, "message": "AI request failed."}
+    return {"available": True, "ok": True, "result": result, "remaining_quota": None}
+
+
 def _analyze_sync(site_names: List[str], config) -> Dict:
+    if getattr(config, "deepseek_api_key", None):
+        return _analyze_deepseek(site_names, config)
+
     apikey = load_api_key_from_file(config)
     if not apikey:
         return {

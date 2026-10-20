@@ -58,4 +58,4 @@ jobs:
         pip install -r requirements.txt -r requirements-web.txt pytest httpx
     - name: Run Web layer tests
       run: |
-        python -m pytest tests/test_web.py -v
+        python -m pytest tests/test_web.py tests/test_ai_deepseek.py -v

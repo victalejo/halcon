@@ -87,6 +87,19 @@ docker run --rm -p 8000:8000 halcon-web
 { "type": "error",    "message": "..." }
 ```
 
+## AI profiling
+
+`POST /api/ai/analyze` uses DeepSeek directly when `DEEPSEEK_API_KEY` is set;
+otherwise it falls back to the hosted endpoint (`API_URL` + `.ai_key.json` from
+`--setup-ai`). Only the names of the sites found are sent, never the username
+or email. The answer is in Spanish with the same `result` shape either way.
+
+| Variable | Default | Meaning |
+|----------|---------|---------|
+| `DEEPSEEK_API_KEY` | _(unset)_ | Enables the DeepSeek backend |
+| `DEEPSEEK_MODEL` | `deepseek-chat` | Model to use |
+| `DEEPSEEK_BASE_URL` | `https://api.deepseek.com` | API base URL |
+
 ## Security (auth + rate limit)
 
 Auth is **opt-in** (open for local use). Rate limiting is **on by default**.

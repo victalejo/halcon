@@ -90,6 +90,10 @@ def build_config(
 
     cfg.instagram_session_id = os.getenv("INSTAGRAM_SESSION_ID") or None
     cfg.api_url = os.getenv("API_URL")
+    # DeepSeek takes precedence over the hosted API_URL endpoint when set.
+    cfg.deepseek_api_key = (os.getenv("DEEPSEEK_API_KEY") or "").strip() or None
+    cfg.deepseek_base_url = os.getenv("DEEPSEEK_BASE_URL") or None
+    cfg.deepseek_model = os.getenv("DEEPSEEK_MODEL") or None
 
     # Per-search mutable state the core reads/writes.
     cfg.metadata_params = None
